@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import Header from "./Header";
-
+import { Collapse } from "antd";
 
 import { Col, Container, Row } from "react-bootstrap";
 import rasm from "../Img/bosh1.png";
@@ -9,22 +9,27 @@ import styled from "../Css/Yangiliklar.module.css";
 import { Navigate } from "react-router-dom";
 import axios from "axios";
 
-// import PuffLoader from "react-spinners/PuffLoader";
+import PuffLoader from "react-spinners/PuffLoader";
+const { Panel } = Collapse;
 
 export default class Yangiliklar extends Component {
   state = {
-    loader: false,
+    loader: true,
   login:false,
+  news:null,
+  raqam:0,
   };
   componentDidMount() {
   axios.get('https://gorest.co.in/public/v1/posts/').then(res=>{
-    console.log(res.data)
-  })
+   
+    this.setState({news:res.data.data})
     setTimeout(() => {
       this.setState({
         loader: false,
       });
     }, 1000);
+  })
+   
   }
   render() {
     return (<>
@@ -41,11 +46,11 @@ export default class Yangiliklar extends Component {
             justifyContent: "center",
           }}
         >
-          {/* <PuffLoader
+          <PuffLoader
             color="#ff4500"
             loading={this.state.loader}
             size={200}
-          /> */}
+          />
         </div>
       ) : (
         <div>
@@ -89,11 +94,35 @@ export default class Yangiliklar extends Component {
             </Container>
           </div>
        <div className={style.news}>
-<Row>
-</Row>
+<Container>
+<div className={styled.newsY}>
+              <Collapse accordion defaultActiveKey={[this.state.raqam]}>
+                {this.state.news !== null
+                  ? this.state.news.map((item) => {
+                      return (
+                        <Panel style={{color:'white'}} className={styled.panel} header={item.title}>
+                          <div>
+                            <Container>
+                             
+                              <div className={styled.yozuv}>
+                              
+                                <p>{item.body}</p>
+                              </div>
+                            </Container>
+                          </div>
+                        </Panel>
+                      );
+                    })
+                  : ""}
+              </Collapse>
+            </div>
+</Container>
        </div>
         </div>
       )}
+      <br/>
+      <br/>
+      <br/>
     </div>:<Navigate to="/login"/>
     }
     </>
