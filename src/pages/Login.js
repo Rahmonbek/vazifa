@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import Header from "./Header";
-
+import {LeftCircleOutlined} from '@ant-design/icons'
 import {Navigate} from 'react-router-dom'
 import { Col, Container, Row } from "react-bootstrap";
 import rasm from "../Img/bosh5.png";
@@ -13,14 +13,18 @@ export default class Login extends Component {
   state = {
     loader: true,
     login:false,
-    log:true
+    log:true,
+    dashboard:false
   };
+  dashboard=()=>{
+    this.setState({dashboard:true})
+  }
   componentDidMount() {
     setTimeout(() => {
       this.setState({
         loader: false,
       });
-    }, 1000);
+    }, 2000);
   }
   login=()=>{
     var username=document.getElementById('username').value;
@@ -34,8 +38,7 @@ export default class Login extends Component {
    
   }
   render() {
-    return (<>
-    {this.state.login?<Navigate to="/yangiliklar"/>:
+    return (<>{this.state.dashboard?<Navigate to="/"/>: this.state.login?<Navigate to="/yangiliklar"/>:
     <div className={style.dashboardhead}>
         {this.state.loader ? (
           <div
@@ -57,7 +60,7 @@ export default class Login extends Component {
         ) : (
           <div>
             <Header />
-
+<LeftCircleOutlined onClick={this.dashboard} className={styled.lo}/>
             <div className={style.head}>
               <Container>
                 <Row>
@@ -106,6 +109,7 @@ export default class Login extends Component {
           </div>
         )}
       </div>}
+   
     </>
       
     );

@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import Header from "./Header";
-
+import {Navigate} from 'react-router-dom'
 
 import { Col, Container, Row } from "react-bootstrap";
 import rasm from "../Img/bosh1.png";
@@ -9,18 +9,26 @@ import PuffLoader from "react-spinners/PuffLoader";
 
 export default class Dashboard extends Component {
   state = {
-    loader: false,
+    loader: true,
+    login:false,
   };
   componentDidMount() {
     setTimeout(() => {
       this.setState({
         loader: false,
       });
-    }, 1000);
+    }, 2000);
   }
+login=()=>{
+this.setState({
+login:true
+})
+}
   render() {
     return (
-      <div className={style.dashboardhead}>
+      <>
+      {
+        this.state.login?<Navigate to="/login"/>:<div className={style.dashboardhead}>
         {this.state.loader ? (
           <div
             style={{
@@ -63,7 +71,7 @@ export default class Dashboard extends Component {
                        suffer from inaction and not for life
                        reading for school.
                     </p>
-                    <a href="tel: +998930820372">Contact us</a>
+                    <button onClick={this.login} className={style.but}>Login</button>
                   </Col>
                   <Col lg="6" md="12" sm="12">
                     <br />
@@ -85,6 +93,9 @@ export default class Dashboard extends Component {
           </div>
         )}
       </div>
+      }
+      </>
+      
     );
   }
 }

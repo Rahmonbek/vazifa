@@ -3,12 +3,12 @@ import Header from "./Header";
 import { Collapse } from "antd";
 
 import { Col, Container, Row } from "react-bootstrap";
-import rasm from "../Img/bosh1.png";
+import rasm from "../Img/bosh2.png";
 import style from "../Css/Dashboard.module.css";
 import styled from "../Css/Yangiliklar.module.css";
 import { Navigate } from "react-router-dom";
 import axios from "axios";
-
+import {BulbFilled,RightCircleOutlined } from '@ant-design/icons'
 import PuffLoader from "react-spinners/PuffLoader";
 const { Panel } = Collapse;
 
@@ -18,19 +18,22 @@ export default class Yangiliklar extends Component {
   login:false,
   news:null,
   raqam:0,
+  log:false,
   };
   componentDidMount() {
   axios.get('https://gorest.co.in/public/v1/posts/').then(res=>{
    
-    this.setState({news:res.data.data})
-    setTimeout(() => {
-      this.setState({
-        loader: false,
-      });
-    }, 1000);
+    this.setState({news:res.data.data, loader: false,})
+   
   })
    
   }
+ logOut=()=>{
+   window.localStorage.removeItem('data')
+   this.setState({
+     log:true
+   })
+ }
   render() {
     return (<>
     {
@@ -75,7 +78,7 @@ export default class Yangiliklar extends Component {
                   <p>
                   Here you can see the latest news in the system. All information is concise and convenient.
                   </p>
-                  <a href="tel: +998930820372">Contact us</a>
+                  <button onClick={this.logOut} className={styled.but} >Logout</button>
                 </Col>
                 <Col lg="6" md="12" sm="12">
                   <br />
@@ -92,15 +95,16 @@ export default class Yangiliklar extends Component {
                 </Col>
               </Row>
             </Container>
+            
           </div>
        <div className={style.news}>
 <Container>
 <div className={styled.newsY}>
-              <Collapse accordion defaultActiveKey={[this.state.raqam]}>
+              <Collapse expandIcon={({ isActive }) => <RightCircleOutlined className={styled.text1} style={{ position:'relative', top:'-5px'}} rotate={isActive ? 90 : 0} />}  expandIconPosition="left" accordion defaultActiveKey={[this.state.raqam]}>
                 {this.state.news !== null
                   ? this.state.news.map((item) => {
                       return (
-                        <Panel style={{color:'white'}} className={styled.panel} header={item.title}>
+                        <Panel extra={<BulbFilled className={styled.text}/>} className={styled.panel} header={<p className={styled.text1}>{item.title}</p>}>
                           <div>
                             <Container>
                              

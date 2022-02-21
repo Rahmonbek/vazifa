@@ -2,7 +2,7 @@ body{ background-color: rgb(40, 30, 100);}
 .navbar:hover{color:orangered}
 .navbar{
   color: white;
-                    margin-left: 50px;
+                    margin-left: 100px;
                     font-size:20px;
                     text-decoration:none;
                     font-weight: 400;
