@@ -24,3 +24,6 @@
 .text{color:white;}
 .text1{color:white;}
 .panel:hover .text{color:gold;  }
+@media(max-width:900px){
+  .news{margin-top: 200px;}
+}

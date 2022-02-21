@@ -73,9 +73,9 @@ export default class Login extends Component {
                       
                       justifyContent: "center",
                       alignItems:"center",
-                      height: "calc(100vh - 100px)",
+                      height: "calc(100vh-100px)",
                     }}
-                    className={style.head1}
+                    className={style.head3}
                   >
                    <form className={styled.for}>
                    <label>Enter your username</label>

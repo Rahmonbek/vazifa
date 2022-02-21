@@ -144,11 +144,10 @@
 }
 @media (max-width: 950px) {
   .head {
-    height: calc(100vh - 300px);
+    height: calc(100vh);
   }
-  .head1 {
-    display: none !important;
-  }
+  .rasm{margin-top: 40px;}
+  
 
   .rasm {
     margin: 20px;

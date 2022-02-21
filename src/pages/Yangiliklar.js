@@ -97,7 +97,7 @@ export default class Yangiliklar extends Component {
             </Container>
             
           </div>
-       <div className={style.news}>
+       <div className={styled.news}>
 <Container>
 <div className={styled.newsY}>
               <Collapse expandIcon={({ isActive }) => <RightCircleOutlined className={styled.text1} style={{ position:'relative', top:'-5px'}} rotate={isActive ? 90 : 0} />}  expandIconPosition="left" accordion defaultActiveKey={[this.state.raqam]}>
