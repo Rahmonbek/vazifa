@@ -1,15 +1,19 @@
 import React, { Component } from "react";
 import Header from "./Header";
 
-
+import {Navigate} from 'react-router-dom'
 import { Col, Container, Row } from "react-bootstrap";
-import rasm from "../Img/bosh1.png";
+import rasm from "../Img/bosh5.png";
 import style from "../Css/Dashboard.module.css";
+import styled from "../Css/Login.module.css";
+
 import PuffLoader from "react-spinners/PuffLoader";
 
-export default class Dashboard extends Component {
+export default class Login extends Component {
   state = {
-    loader: false,
+    loader: true,
+    login:false,
+    log:true
   };
   componentDidMount() {
     setTimeout(() => {
@@ -18,9 +22,21 @@ export default class Dashboard extends Component {
       });
     }, 1000);
   }
+  login=()=>{
+    var username=document.getElementById('username').value;
+    var password=document.getElementById('password').value;
+    if(username==="admin" && password==="admin12345"){
+      this.setState({login:true})
+      window.localStorage.setItem("data", "Admin Rahmonbek Ismoilov logged in")
+    }else{
+      this.setState({log:false})
+    }
+   
+  }
   render() {
-    return (
-      <div className={style.dashboardhead}>
+    return (<>
+    {this.state.login?<Navigate to="/yangiliklar"/>:
+    <div className={style.dashboardhead}>
         {this.state.loader ? (
           <div
             style={{
@@ -51,19 +67,24 @@ export default class Dashboard extends Component {
                     sm="12"
                     style={{
                       display: "flex",
-                      flexDirection: "column",
+                      
                       justifyContent: "center",
-                      height: "100%",
+                      alignItems:"center",
+                      height: "calc(100vh - 100px)",
                     }}
                     className={style.head1}
                   >
-                    <h1>Reading is the best learning.</h1>
-                    <p>
-                    As with everything in reading, we are
-                       suffer from inaction and not for life
-                       reading for school.
-                    </p>
-                    <a href="tel: +998930820372">Contact us</a>
+                   <form className={styled.for}>
+                   <label>Enter your username</label>
+                   <input id="username" type="text" /><br/><br/>
+                   <label>Enter your password</label>
+                   <input id="password" type="password" /><br/>
+                   {!this.state.log?<p>Username and password are incorrect. Please check and try again.</p>:''}
+                   <button type="button" onClick={this.login} className={styled.but}>Login</button>
+
+
+                   </form>
+                   
                   </Col>
                   <Col lg="6" md="12" sm="12">
                     <br />
@@ -84,7 +105,10 @@ export default class Dashboard extends Component {
          
           </div>
         )}
-      </div>
+      </div>}
+    </>
+      
     );
   }
 }
+

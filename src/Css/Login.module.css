@@ -1,0 +1,27 @@
+.for{display:flex; width:70%; flex-direction:column; }
+.for label{color:orangered; font-size: 14px;}
+.for p{font-size:16px; color:red; }
+.for input{width:100%; border:none; outline:none; 
+    box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px;
+     border-radius:10px; font-size: 18px; padding:4px 10px;}
+.but {
+    padding: 5px;
+    margin-top: 20px;
+    border-radius: 20px;
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+    background-color: rgb(40, 30, 100);
+    transition: 0.3s;
+    border: 1px solid orangered;
+    font-size: 20px;
+    color: white;
+    text-decoration: none;
+    display: inline-block;
+    width: 250px;
+    text-align: center;
+  }
+.but:hover {
+    background-color: orangered;
+    box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px,
+      rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px,
+      rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
+  }

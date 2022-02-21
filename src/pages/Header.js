@@ -22,49 +22,7 @@ export default class Header extends Component {
                   className="navbar"
                   to="/"
                 >
-                  Bosh sahifa
-                </NavLink>
-                <NavLink
-                  exact
-                  activeStyle={{ color: "orangered" }}
-                  className="navbar"
-                  to="/yangiliklar"
-                >
-                  Yangiliklar
-                </NavLink>
-
-                <NavLink
-                  exact
-                  activeStyle={{ color: "orangered" }}
-                  className="navbar"
-                  to="/yutuqlar"
-                >
-                  Yutuqlar
-                </NavLink>
-                <NavLink
-                  exact
-                  activeStyle={{ color: "orangered" }}
-                  className="navbar"
-                  to="/fotolavhalar"
-                >
-                  Rasmlar
-                </NavLink>
-                <NavLink
-                  exact
-                  activeStyle={{ color: "orangered" }}
-                  className="navbar"
-                  to="/kitoblar"
-                >
-                  Kitoblar
-                </NavLink>
-
-                <NavLink
-                  exact
-                  activeStyle={{ color: "orangered" }}
-                  className="navbar"
-                  to="/videolavhalar"
-                >
-                  Videolar
+                 Dashboard
                 </NavLink>
                 <NavLink
                   exact
@@ -72,8 +30,10 @@ export default class Header extends Component {
                   className="navbar"
                   to="/login"
                 >
-                  Test
+                 News
                 </NavLink>
+
+              
               </Nav>
             </Navbar.Collapse>
           </Container>
