@@ -19,10 +19,7 @@ export default class App extends Component {
           <Route exact path="/" element={<Dashboard />} />
           <Route exact path="/login" element={<Login />} />
           <Route exact path="/yangiliklar" element={<Yangiliklar />} />
-
-          
-
-          </Routes>
+</Routes>
          
  
         </BrowserRouter>
