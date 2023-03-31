@@ -1,0 +1,711 @@
+@model IEnumerable<AutoBranchStructure>
+@{
+    ViewData["Title"] = "";
+    Layout = "~/Views/Shared/_LayoutAdminRegion.cshtml";
+    int i = 1;
+}
+<style>
+        .table td {
+            border-color: darkgray !important;
+        }
+    
+        .selectBox {
+            position: relative;
+        }
+    
+            .selectBox select {
+                width: 100%;
+            }
+    
+        .overSelect {
+            position: absolute;
+            left: 0;
+            right: 0;
+            top: 0;
+            bottom: 0;
+        }
+    
+        lable {
+            font-size: 16px;
+        }
+    
+        label input {
+            margin-left: 5px;
+            margin-right: 5px;
+        }
+    
+        #checkboxes {
+            display: none;
+            border: 1px #dadada solid;
+            padding-left: 10px;
+            padding-top: 10px;
+            padding-right: 10px;
+            z-index: 100;
+            position: absolute;
+            width: calc(100% - 30px);
+            background-color: white;
+        }
+    
+            #checkboxes label {
+                display: block;
+            }
+    
+                #checkboxes label:hover {
+                    background-color: lightgray;
+                }
+    </style>
+<style>
+    .table td {
+        border-color: darkgray !important;
+    }
+</style>
+
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item active" aria-current="page">@ViewData["TitleT"]</li>
+    </ol>
+</nav>
+
+<div class="card shadow mb-4">
+    <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">Filiallar monitoringi</h6>
+    </div>
+    <div class="card-body">
+      <form>
+                <div class="row">
+                 
+                    <div class="col-md-3">
+                          <div class="form-group">
+                            <div class="selectBox_types" onclick="showCheckboxes_types()">
+                                <label>Avtotransport turi</label>
+                                <select class="custom-select" id='sel sel_types'>
+                                    <option value="null" class="selall_types" id='selall'>Barchasi</option>
+                                </select>
+                                <div class="overSelect overSelect_types"></div>
+                            </div>
+                            <div  class="checkboxes_types" id="checkboxes">
+                            </div>
+                        </div>
+                        
+                    </div>
+                       <div class="col-md-3">
+                        <div class="form-group">
+                            <div class="selectBox_tech_condition" onclick="showCheckboxes_tech_condition()">
+                                <label>Texnik holati</label>
+                                <select class="custom-select" id='sel sel_tech_condition'>
+                                    <option value="null" class="selall_tech_condition" id='selall'>Barchasi</option>
+                                </select>
+                                <div class="overSelect overSelect_tech_condition"></div>
+                            </div>
+                            <div class="checkboxes_tech_condition" id="checkboxes">
+                            </div>
+                        </div>
+                    </div>
+                     <div class="col-md-3">
+                        <div class="form-group">
+                            <div class="selectBox_fuel_type" onclick="showCheckboxes_fuel_type()">
+                                <label>Yonilg'i turi</label>
+                                <select class="custom-select" id='sel sel_fuel_type'>
+                                    <option value="null" class="selall_fuel_type" id='selall'>Barchasi</option>
+                                </select>
+                                <div class="overSelect overSelect_fuel_type"></div>
+                            </div>
+                            <div class="checkboxes_fuel_type" id="checkboxes">
+                            </div>
+                        </div>
+                    </div>
+                     
+                       <div class="col-md-3" style="padding-top:30px">
+                        <div class="form-group">
+                            <button class="btn btn-primary form-control" onclick="qidirish()" type="button" data-toggle="tooltip" data-placement="bottom" title="QIDIRISH">
+                                <span class="btn-icon-wrapper pr-2 opacity-9">
+                                    <i class="fa fa-search fa-w-20"></i>
+                                </span>QIDIRISH
+                            </button>
+                        </div>
+                    </div>
+                     
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <div class="selectBox_use_purpose" onclick="showCheckboxes_use_purpose()">
+                                <label>Xizmat vazifasi</label>
+                                <select class="custom-select" id='sel sel_use_purpose'>
+                                    <option value="null" class="selall_use_purpose" id='selall'>Barchasi</option>
+                                </select>
+                                <div class="overSelect overSelect_use_purpose"></div>
+                            </div>
+                            <div class="checkboxes_use_purpose" id="checkboxes">
+                            </div>
+                        </div>
+                    </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <div class="selectBox_years" onclick="showCheckboxes_years()">
+                            <label>Holati</label>
+                            <select class="custom-select" id='sel sel_years'>
+                                <option value="null" class="selall_years" id='selall'>Barchasi</option>
+                            </select>
+                            <div class="overSelect overSelect_years"></div>
+                        </div>
+                        <div class="checkboxes_years" id="checkboxes">
+                        </div>
+                    </div>
+                    </div>
+               
+                   <div class="col-md-3">
+                        <div class="form-group">
+                        <div class="selectBox_gps" onclick="showCheckboxes_gps()">
+                            <label>GPS mavjudligi</label>
+                            <select class="custom-select" id='sel sel_gps'>
+                                <option value="null" class="selall_gps" id='selall'>Barchasi</option>
+                            </select>
+                            <div class="overSelect overSelect_gps"></div>
+                        </div>
+                        <div class="checkboxes_gps" id="checkboxes">
+                        </div>
+                    </div>
+    
+                    </div>
+                   
+                </div>
+            </form>
+       <div class="table-responsive">
+            <table class="table table-bordered table-hover table-striped" style="text-align:center" id="myTable">
+                <thead class="thead-light">
+                    <tr>
+                        <th style="vertical-align:middle">#</th>
+                            <th style="vertical-align:middle">Filiallar</th>
+                            <th style="vertical-align:middle">Avtotransport soni</th>
+                    </tr>
+              
+                  
+                </thead>
+                <tbody>
+
+                    @foreach (var item in Model.OrderBy(x => x.branch_name))
+                    {
+                           <tr>
+                                <td style="vertical-align:middle">@i</td>
+                                <td style="vertical-align:middle; cursor:pointer" onclick='window.location.href="/Region/BranchLogsAuto/@item.branch_id"'>@item.branch_name</td>
+                                <td style="vertical-align:middle">@item.auto_num</td>
+                              
+                            </tr>
+                            i++;
+                    }
+                </tbody>
+                  <tfoot><tr class="font-weight-bold">
+                            <td></td>
+                            <td style="vertical-align:middle">Jami</td>
+                            <td style="vertical-align:middle">@Model.Sum(x => x.auto_num)</td>
+                           
+                        </tr></tfoot>
+            </table>
+        </div>
+    </div>
+</div>
+
+<script>
+
+     
+    var fuel_type="()"
+    var types="()"
+    var gps="()"
+    var years="()"
+    var use_purpose="()"
+    var tech_condition="()"
+    const yearsArray=[{name:"Yangi (3 yilgacha)", id:1},{name:"O'rta (3 - 7 yillik)", id:2},{name:"Eski (7 yildan katta)", id:3},]
+    const tech_conditionArray=[{name:"Soz", id:1},{name:"Nosoz", id:0}]
+    var fuel_typeArray=[]
+    var typesArray=[]
+    var gpsArray=[]
+    var use_purposeArray=[]
+    $(document).ready(function () {
+    var url_string = window.location.href;
+    var url = new URL(url_string);
+    var search = url.search;
+    var fuel_type_url=""
+    if(search.indexOf("fuel_type")!=-1 && search.indexOf("fuel_type=null")==-1){
+    fuel_type_url=search.slice(search.indexOf("fuel_type")+11, search.indexOf(")", search.indexOf("fuel_type")))
+    fuel_type=`(${fuel_type_url})`
+    fuel_type_url=fuel_type_url.split(',')
+    }
+    var types_url=""
+    if(search.indexOf("types")!=-1 && search.indexOf("types=null")==-1){
+    types_url=search.slice(search.indexOf("types")+7, search.indexOf(")", search.indexOf("types")))
+    types=`(${types_url})`
+    types_url=types_url.split(',')
+    }
+    var gps_url=""
+    if(search.indexOf("gps")!=-1 && search.indexOf("gps=null")==-1){
+    gps_url=search.slice(search.indexOf("gps")+5, search.indexOf(")", search.indexOf("gps")))
+    gps=`(${gps_url})`
+    gps_url=gps_url.split(',')
+    }
+    var years_url=""
+    if(search.indexOf("years")!=-1 && search.indexOf("years=null")==-1){
+    years_url=search.slice(search.indexOf("years")+7, search.indexOf(")", search.indexOf("years")))
+    years=`(${years_url})`
+    years_url=years_url.split(',')
+    }
+    var use_purpose_url=""
+    if(search.indexOf("use_purpose")!=-1 && search.indexOf("use_purpose=null")==-1){
+    use_purpose_url=search.slice(search.indexOf("use_purpose")+13, search.indexOf(")", search.indexOf("use_purpose")))
+    use_purpose=`(${use_purpose_url})`
+    use_purpose_url=use_purpose_url.split(',')
+    }
+    var tech_condition_url=""
+    if(search.indexOf("tech_condition")!=-1 && search.indexOf("tech_condition=null")==-1){
+    tech_condition_url=search.slice(search.indexOf("tech_condition")+16, search.indexOf(")", search.indexOf("tech_condition")))
+    tech_condition=`(${tech_condition_url})`
+    tech_condition_url=tech_condition_url.split(',')
+    }
+    $.getJSON("/GetApi/showFuelType/", function (result) {
+    var $dropdown = $(".checkboxes_fuel_type");
+    fuel_typeArray=result
+
+    $.each(result, function () {
+    if(fuel_type_url==""){
+    $dropdown.append($("<label onclick='showDrop()'><input name='fuel_type' type='checkbox' checked='true' value='"+this.id+"' onclick='clickcheckbox_fuel_type()' />"+this.name+"</label>"));
+    }else{
+    if(fuel_type_url.indexOf(this.id.toString())!=-1){
+    console.log(fuel_type_url.indexOf(this.id.toString()))
+      $dropdown.append($("<label onclick='showDrop()'><input name='fuel_type' type='checkbox' checked='true' value='"+this.id+"' onclick='clickcheckbox_fuel_type()' />"+this.name+"</label>"));
+    }else{
+      $dropdown.append($("<label onclick='showDrop()'><input name='fuel_type' type='checkbox' value='"+this.id+"' onclick='clickcheckbox_fuel_type()' />"+this.name+"</label>"));
+    }
+    }
+    });
+     if (fuel_type_url=="" || fuel_type_url.length==result.length){
+    $(".selall_fuel_type").text('Barchasi');
+    }
+    else {
+    $(".selall_fuel_type").text('Tanlanganlar');
+    }
+     
+     });
+    $.getJSON("/GetApi/showTypes/", function (result) {
+    var $dropdown = $(".checkboxes_types");
+    typesArray=result
+    $.each(result, function () {
+    if(types_url==""){
+    $dropdown.append($("<label onclick='showDrop()'><input name='types' type='checkbox' checked='true' value='"+this.id+"' onclick='clickcheckbox_types()' />"+this.name+"</label>"));
+    }else{
+    if(types_url.indexOf(this.id.toString())!=-1){
+    console.log(types_url.indexOf(this.id.toString()))
+      $dropdown.append($("<label onclick='showDrop()'><input name='types' type='checkbox' checked='true' value='"+this.id+"' onclick='clickcheckbox_types()' />"+this.name+"</label>"));
+    }else{
+      $dropdown.append($("<label onclick='showDrop()'><input name='types' type='checkbox' value='"+this.id+"' onclick='clickcheckbox_types()' />"+this.name+"</label>"));
+    }
+    }
+    });
+     if (types_url=="" || types_url.length==result.length){
+    $(".selall_types").text('Barchasi');
+    }
+    else {
+    $(".selall_types").text('Tanlanganlar');
+    }
+     
+     });
+    $.getJSON("/GetApi/showGps/", function (result) {
+    var $dropdown = $(".checkboxes_gps");
+    gpsArray=result
+
+    $.each(result, function () {
+    if(gps_url==""){
+    $dropdown.append($("<label onclick='showDrop()'><input name='gps' type='checkbox' checked='true' value='"+this.id+"' onclick='clickcheckbox_gps()' />"+this.name+"</label>"));
+    }else{
+    if(gps_url.indexOf(this.id.toString())!=-1){
+    console.log(gps_url.indexOf(this.id.toString()))
+      $dropdown.append($("<label onclick='showDrop()'><input name='gps' type='checkbox' checked='true' value='"+this.id+"' onclick='clickcheckbox_gps()' />"+this.name+"</label>"));
+    }else{
+      $dropdown.append($("<label onclick='showDrop()'><input name='gps' type='checkbox' value='"+this.id+"' onclick='clickcheckbox_gps()' />"+this.name+"</label>"));
+    }
+    }
+    });
+     if (gps_url=="" || gps_url.length==result.length){
+    $(".selall_gps").text('Barchasi');
+    }
+    else {
+    $(".selall_gps").text('Tanlanganlar');
+    }
+     
+     });
+    $.getJSON("/GetApi/showUsePurpose/", function (result) {
+    var $dropdown = $(".checkboxes_use_purpose");
+    use_purposeArray=result
+    $.each(result, function () {
+    if(use_purpose_url==""){
+    $dropdown.append($("<label onclick='showDrop()'><input name='use_purpose' type='checkbox' checked='true' value='"+this.id+"' onclick='clickcheckbox_use_purpose()' />"+this.name+"</label>"));
+    }else{
+    if(use_purpose_url.indexOf(this.id.toString())!=-1){
+    console.log(use_purpose_url.indexOf(this.id.toString()))
+      $dropdown.append($("<label onclick='showDrop()'><input name='use_purpose' type='checkbox' checked='true' value='"+this.id+"' onclick='clickcheckbox_use_purpose()' />"+this.name+"</label>"));
+    }else{
+      $dropdown.append($("<label onclick='showDrop()'><input name='use_purpose' type='checkbox' value='"+this.id+"' onclick='clickcheckbox_use_purpose()' />"+this.name+"</label>"));
+    }
+    }
+    });  if (use_purpose_url=="" || use_purpose_url.length==result.length){
+    $(".selall_use_purpose").text('Barchasi');
+    }
+    else {
+    $(".selall_use_purpose").text('Tanlanganlar');
+    }
+     
+     });
+    
+    var $dropdown = $(".checkboxes_tech_condition");
+    $.each(tech_conditionArray, function () {
+    if(tech_condition_url==""){
+    $dropdown.append($("<label onclick='showDrop()'><input name='tech_condition' type='checkbox' checked='true' value='"+this.id+"' onclick='clickcheckbox_tech_condition()' />"+this.name+"</label>"));
+    }else{
+    if(tech_condition_url.indexOf(this.id.toString())!=-1){
+    console.log(tech_condition_url.indexOf(this.id.toString()))
+      $dropdown.append($("<label onclick='showDrop()'><input name='tech_condition' type='checkbox' checked='true' value='"+this.id+"' onclick='clickcheckbox_tech_condition()' />"+this.name+"</label>"));
+    }else{
+      $dropdown.append($("<label onclick='showDrop()'><input name='tech_condition' type='checkbox' value='"+this.id+"' onclick='clickcheckbox_tech_condition()' />"+this.name+"</label>"));
+    }
+    }
+    });   if (tech_condition_url=="" || tech_condition_url.length==tech_conditionArray.length){
+    $(".selall_tech_condition").text('Barchasi');
+    }
+    else {
+    $(".selall_tech_condition").text('Tanlanganlar');
+    }
+     
+    
+    
+     var $dropdown = $(".checkboxes_years");
+    $.each(yearsArray, function () {
+    if(years_url==""){
+    $dropdown.append($("<label onclick='showDrop()'><input name='years' type='checkbox' checked='true' value='"+this.id+"' onclick='clickcheckbox_years()' />"+this.name+"</label>"));
+    }else{
+    if(years_url.indexOf(this.id.toString())!=-1){
+    console.log(years_url.indexOf(this.id.toString()))
+      $dropdown.append($("<label onclick='showDrop()'><input name='years' type='checkbox' checked='true' value='"+this.id+"' onclick='clickcheckbox_years()' />"+this.name+"</label>"));
+    }else{
+      $dropdown.append($("<label onclick='showDrop()'><input name='years' type='checkbox' value='"+this.id+"' onclick='clickcheckbox_years()' />"+this.name+"</label>"));
+    }
+    }
+    });
+       if (fuel_type_url=="" || fuel_type_url.length==yearsArray.length){
+       $(".selall_full_type").text('Barchasi');
+       }
+       else {
+       $(".selall_full_type").text('Tanlanganlar');
+       }
+    });
+       var expanded_types = false;
+       var expanded_fuel_type = false;
+       var expanded_tech_condition = false;
+       var expanded_gps = false;
+       var expanded_years = false;
+       var expanded_use_purpose = false;
+    var t = false;
+    function closeAllCheck(){
+        
+    var checkboxes = document.querySelectorAll("#checkboxes");
+    for(let i=0; i<checkboxes.length; i++){
+        checkboxes[i].style.display = "none";
+    }
+    expanded_types = false;
+    expanded_fuel_type = false;
+    expanded_tech_condition = false;
+    expanded_gps = false;
+    expanded_years = false;
+    expanded_use_purpose = false;
+    }
+    function showCheckboxes_fuel_type() {
+    t = true;
+    var checkboxes = document.querySelector(".checkboxes_fuel_type");
+    if (!expanded_fuel_type) {
+         closeAllCheck()
+       checkboxes.style.display = "block";
+       expanded_fuel_type = true;
+    } 
+    else {
+       checkboxes.style.display = "none";
+       expanded_fuel_type = false;
+    }
+    setTimeout(()=>{
+       t = false
+    }, 20)
+    }
+    
+    function showCheckboxes_types() {
+    t = true;
+    var checkboxes = document.querySelector(".checkboxes_types");
+    if (!expanded_types) {
+        closeAllCheck()
+       checkboxes.style.display = "block";
+       expanded_types = true;
+    } 
+    else {
+       checkboxes.style.display = "none";
+       expanded_types = false;
+    }
+    setTimeout(()=>{
+       t = false
+    }, 20)
+    }
+    function showCheckboxes_gps() {
+    t = true;
+    var checkboxes = document.querySelector(".checkboxes_gps");
+    if (!expanded_gps) {
+    closeAllCheck()
+        checkboxes.style.display = "block";
+       expanded_gps = true;
+    } 
+    else {
+       checkboxes.style.display = "none";
+       expanded_gps = false;
+    }
+    setTimeout(()=>{
+       t = false
+    }, 20)
+    }
+    function showCheckboxes_years() {
+    t = true;
+    var checkboxes = document.querySelector(".checkboxes_years");
+    if (!expanded_years) {
+    closeAllCheck()
+        checkboxes.style.display = "block";
+       expanded_years = true;
+    } 
+    else {
+       checkboxes.style.display = "none";
+       expanded_years = false;
+    }
+    setTimeout(()=>{
+       t = false
+    }, 20)
+    }
+    function showCheckboxes_tech_condition() {
+    t = true;
+    var checkboxes = document.querySelector(".checkboxes_tech_condition");
+    if (!expanded_tech_condition) {
+    closeAllCheck()
+        checkboxes.style.display = "block";
+       expanded_tech_condition = true;
+    } 
+    else {
+       checkboxes.style.display = "none";
+       expanded_tech_condition = false;
+    }
+    setTimeout(()=>{
+       t = false
+    }, 20)
+    }
+    function showCheckboxes_use_purpose() {
+    t = true;
+    var checkboxes = document.querySelector(".checkboxes_use_purpose");
+    if (!expanded_use_purpose) {
+    closeAllCheck()
+        checkboxes.style.display = "block";
+       expanded_use_purpose = true;
+    } 
+    else {
+       checkboxes.style.display = "none";
+       expanded_use_purpose = false;
+    }
+    setTimeout(()=>{
+       t = false
+    }, 20)
+    }
+    function clickcheckbox_fuel_type()
+    {
+    
+     
+    
+    fuel_type="("
+    $("input[name='fuel_type']:checked").each(function () {
+         fuel_type+=$(this).attr('value')+","
+    
+    });
+    if(fuel_type[fuel_type.length-1]==","){
+       fuel_type=fuel_type.slice(0, fuel_type.length-1)
+    }
+    fuel_type+=")"
+    
+    
+    if ((fuel_type.length-1)/2 == fuel_typeArray.length){
+       $(".selall_fuel_type").text('Barchasi');
+    }
+    else {
+       $(".selall_fuel_type").text('Tanlanganlar');
+    }
+    
+    };
+    
+    function clickcheckbox_types()
+    {
+    
+    types="("
+    $("input[name='types']:checked").each(function () {
+         types+=$(this).attr('value')+","
+    });
+    if(types[types.length-1]==","){
+       types=types.slice(0, types.length-1)
+    }
+    types+=")"
+    
+    if ((types.length-1)/2 == typesArray.length){
+       $(".selall_types").text('Barchasi');
+    }
+    else {
+       $(".selall_types").text('Tanlanganlar');
+    }
+    };
+    function clickcheckbox_use_purpose()
+    {
+    
+    use_purpose="("
+    $("input[name='use_purpose']:checked").each(function () {
+         use_purpose+=$(this).attr('value')+","
+    });
+    if(use_purpose[use_purpose.length-1]==","){
+       use_purpose=use_purpose.slice(0, use_purpose.length-1)
+    }
+    use_purpose+=")"
+    
+    if ((use_purpose.length-1)/2 == use_purposeArray.length){
+       $(".selall_use_purpose").text('Barchasi');
+    }
+    else {
+       $(".selall_use_purpose").text('Tanlanganlar');
+    }
+    };
+    function clickcheckbox_gps()
+    {
+    
+    gps="("
+    $("input[name='gps']:checked").each(function () {
+         gps+=$(this).attr('value')+","
+    });
+    if(gps[gps.length-1]==","){
+       gps=gps.slice(0, gps.length-1)
+    }
+    gps+=")"
+    
+    if ((gps.length-1)/2 == gpsArray.length){
+       $(".selall_gps").text('Barchasi');
+    }
+    else {
+       $(".selall_gps").text('Tanlanganlar');
+    }
+    };
+    function clickcheckbox_years()
+    {
+    
+    years="("
+    $("input[name='years']:checked").each(function () {
+         years+=$(this).attr('value')+","
+    });
+    if(years[years.length-1]==","){
+       years=years.slice(0, years.length-1)
+    }
+    years+=")"
+    
+    if ((years.length-1)/2 == yearsArray.length){
+       $(".selall_years").text('Barchasi');
+    }
+    else {
+       $(".selall_years").text('Tanlanganlar');
+    }
+    };
+    function clickcheckbox_tech_condition()
+    {
+    
+    tech_condition="("
+    $("input[name='tech_condition']:checked").each(function () {
+         tech_condition+=$(this).attr('value')+","
+    });
+    if(tech_condition[tech_condition.length-1]==","){
+       tech_condition=tech_condition.slice(0, tech_condition.length-1)
+    }
+    tech_condition+=")"
+    
+    if ((tech_condition.length-1)/2 == tech_conditionArray.length){
+       $(".selall_tech_condition").text('Barchasi');
+    }
+    else {
+       $(".selall_tech_condition").text('Tanlanganlar');
+    }
+    };
+    function qidirish(){
+    if(fuel_type=="()"){
+    fuel_type=null
+     }
+     if(gps=="()"){
+    gps=null
+     }
+     if(years=="()"){
+    years=null
+     }
+     if(tech_condition=="()" || (tech_condition.length-1)/2 == tech_conditionArray.length){
+    tech_condition=null
+     }
+     if(use_purpose=="()"){
+    use_purpose=null
+     }
+     if(types=="()"){
+    types=null
+     }
+    var link=window.location.href
+    if(link.indexOf("?")!=-1){
+    window.location.href=link.slice(0,link.indexOf("?"))+`?fuel_type=${fuel_type}&gps=${gps}&years=${years}&tech_condition=${tech_condition}&use_purpose=${use_purpose}&types=${types}`
+    }
+    else{
+       if(link[link.length-1]=="/"){
+       window.location.href=link+`?fuel_type=${fuel_type}&gps=${gps}&years=${years}&tech_condition=${tech_condition}&use_purpose=${use_purpose}&types=${types}`
+       }else{
+       window.location.href=link+`?fuel_type=${fuel_type}&gps=${gps}&years=${years}&tech_condition=${tech_condition}&use_purpose=${use_purpose}&types=${types}`
+       }
+    }
+    }
+    
+        function showDrop(){
+            t=true; 
+            setTimeout(()=>{
+                t=false
+            }, 20)
+        }
+
+    $(document).ready(function () {
+        $('#myTable').DataTable({
+            dom: 'Bfrtip',
+                 scrollY: 480,
+        scrollX:        false,
+        scrollCollapse: true,
+        paging:         false,
+        fixedHeader:           {
+            header: true,
+            footer: true
+        },
+                      buttons: [
+                {
+                    extend: 'excelHtml5',footer:true
+                 
+                },
+                {
+                    extend: 'pdfHtml5',
+                    orientation: 'landscape',
+                    pageSize: 'LEGAL',footer:true
+                   
+                },
+                'print'
+            ],
+            pageLength: 50,
+            "paging": false
+        });
+    });
+
+    $("#Date1").change(function (e) {
+        $('#Date2').attr("min", this.value);
+    });
+    $("#Date2").change(function (e) {
+        $('#Date1').attr("max", this.value);
+    });
+</script>
+
+
+Home

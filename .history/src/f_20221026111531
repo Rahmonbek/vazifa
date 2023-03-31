@@ -1,0 +1,70 @@
+  var data = connection.Query<HududStat>(@"
+                with 
+                d as (
+	                select *
+	                from job_student_payments
+                    where 1=1 " + filtr2 + @"
+                ),
+                db as (
+                  select 
+                    r.id region_id,
+                    sj.branch_id,
+                    sj.group_id,
+                    sj.id,
+                    sj.system_status,
+                    --g.price, 
+                    sj.education_price price, 
+                    g.start_date,
+                    g.end_date,
+	                (select sum(d.paid_price) from d where d.student_id = sj.id and d.status = 1) tolandi,
+	                (select sum(d.paid_price) from d where d.student_id = sj.id and d.status = 2) qaytarildi
+                  from student_jobs sj
+                  inner join jobs j on j.id = sj.job_id
+                  inner join profession_groups g on g.id = sj.group_id
+                  inner join branches b on b.id = sj.branch_id
+                  inner join region_organizations o on o.id = sj.organization_id
+                  inner join regions r on r.id = o.region_id
+                  where g.status != 0 and g.organization_id in (16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31) " + (filtr == "" ? "" : filtr) + @"
+                ),
+                db2 as (
+                  select 
+                    r.id region_id,
+                    sj.branch_id
+                  from student_jobs sj
+                  inner join jobs j on j.id = sj.job_id
+                  inner join profession_groups g on g.id = sj.group_id
+                  inner join branches b on b.id = sj.branch_id
+                  inner join region_organizations o on o.id = sj.organization_id
+                  inner join regions r on r.id = o.region_id
+                  where g.status != 0 and g.organization_id in (16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31) " + (filtr == "" ? "" : filtr) + @"
+                  group by sj.branch_id, r.id
+                ),
+                db3 as (
+                  select 
+                    r.id region_id,
+                    sj.group_id
+                  from student_jobs sj
+                  inner join jobs j on j.id = sj.job_id
+                  inner join profession_groups g on g.id = sj.group_id
+                  inner join branches b on b.id = sj.branch_id
+                  inner join region_organizations o on o.id = sj.organization_id
+                  inner join regions r on r.id = o.region_id
+                  where g.status != 0 and g.organization_id in (16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31) " + (filtr == "" ? "" : filtr) + @"
+                  group by sj.group_id, r.id
+                )
+                select 
+                  r.id region_id,
+                  r.region_lat region,
+                  (select count(*) from db2 db where db.region_id = r.id) Filial,
+                  (select count(*) from db3 db where db.region_id = r.id) Guruh,
+                  (select count(*) from db db where db.region_id = r.id) Uquvchi,
+                  (select count(*) from db db where db.region_id = r.id and (db.system_status != 5 and db.system_status != 1 or db.system_status is null)) Oqiyotganlar,
+                  (select count(*) from db db where db.region_id = r.id and db.end_date <= '" + DateTime.Now.ToString("yyyy-MM-dd") + @"' and (db.system_status != 1 or db.system_status is null)) Bitirganlar,
+                  (select count(*) from db db where db.region_id = r.id and db.system_status = 1) chetlashtirilganlar,
+                  COALESCE((select sum(db.price) from db db where db.region_id = r.id),0) tushish_kerak,
+                  COALESCE((select sum(db.tolandi) from db db where db.region_id = r.id),0) + COALESCE((select sum(db.qaytarildi) from db db where db.region_id = r.id),0) pul,
+                  COALESCE((select sum(db.price) from db db where db.region_id = r.id),0) - (COALESCE((select sum(db.tolandi) from db db where db.region_id = r.id),0) + COALESCE((select sum(db.qaytarildi) from db db where db.region_id = r.id),0)) qarzdorlik
+                from regions r
+                where r.id < 15
+                order by r.id"
+            );
